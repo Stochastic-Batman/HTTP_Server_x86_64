@@ -73,11 +73,13 @@ Handle_GET:
     # Parse path starting at [rsp + 4]
     lea r10, [rsp+4]
     mov r11, r10
+    
 Find_GET_Path_End:
     cmp byte ptr [r11], ' '
     je GET_Path_Parsed
     inc r11
     jmp Find_GET_Path_End
+    
 GET_Path_Parsed:
     mov byte ptr [r11], 0
 
@@ -120,21 +122,24 @@ Handle_POST:
     # Parse path starting at [rsp + 5]
     lea r10, [rsp+5]
     mov r11, r10
+    
 Find_POST_Path_End:
     cmp byte ptr [r11], ' '
     je POST_Path_Parsed
     inc r11
     jmp Find_POST_Path_End
+    
 POST_Path_Parsed:
     mov byte ptr [r11], 0
-
     # Search for "\r\n\r\n" (0x0a0d0a0d) to find start of body
     mov r14, rsp
+    
 Find_Body:
     cmp dword ptr [r14], 0x0a0d0a0d
     je Body_Found
     inc r14
     jmp Find_Body
+    
 Body_Found:
     add r14, 4
     
